@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UserRow from "./user-card";
 import UserHead from "./user-head";
+import Modal from "./modal";
 
 const TableList = () => {
   const [users, setUsers] = useState();
@@ -12,6 +13,7 @@ const TableList = () => {
     const { users } = await res.json();
     setUsers(users);
   };
+
   const createUser = async () => {
     const res = await fetch("http://localhost:8000/users", {
       method: "POST",
@@ -41,15 +43,15 @@ const TableList = () => {
     setUsers(users.filter((user) => user.eid !== userId));
     // const { users } = await res.json();
   };
-  const editUser = async (userId) => {
-    const res = await fetch(`http://localhost:8000/users/${userId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log("first", res);
-  };
+  //   const editUser = async (userId) => {
+  //     const res = await fetch(`http://localhost:8000/users/${userId}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     console.log("first", res);
+  //   };
   useEffect(() => {
     getEmloyeesData();
   }, []);
@@ -64,49 +66,12 @@ const TableList = () => {
         >
           Create User
         </button>
-        <dialog id="my_modal_1" className="modal">
-          <div className="modal-box flex flex-col gap-4">
-            <h3 className="font-bold text-lg">Create New User</h3>
-            <label className="input input-bordered flex items-center gap-2">
-              Name
-              <input
-                type="text"
-                className="grow"
-                placeholder="First name"
-                // value="static"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </label>
-            <label className="input input-bordered flex items-center gap-2">
-              Job
-              <input
-                type="text"
-                className="grow"
-                placeholder="Job"
-                onChange={(e) => setJob(e.target.value)}
-              />
-            </label>
-            <label className="input input-bordered flex items-center gap-2">
-              Email
-              <input
-                type="text"
-                className="grow"
-                placeholder="daisy@site.com"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
-
-            <div className="modal-action">
-              <button onClick={createUser} className="btn btn-info">
-                Create User
-              </button>
-              <form method="dialog">
-                {/* if there is a button in form, it will close the modal */}
-                <button className="btn">Close</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
+        <Modal
+          setFirstName={setFirstName}
+          setJob={setJob}
+          setEmail={setEmail}
+          createUser={createUser}
+        />
       </div>
 
       <div className="overflow-x-auto my-4 mx-8">
@@ -118,7 +83,7 @@ const TableList = () => {
                 key={id}
                 user={user}
                 deleteUser={deleteUser}
-                editUser={editUser}
+                // editUser={editUser}
               />
             ))}
           </tbody>
